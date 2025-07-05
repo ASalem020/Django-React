@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'app.apps.AppConfig',
     'project.apps.ProjectConfig',
+    'donation',
 ]
 
 MIDDLEWARE = [
