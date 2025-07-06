@@ -22,17 +22,15 @@ const Register = () => {
 
         <Formik
           initialValues={{
-            first_name: '',
-            last_name: '',
+            username: '',
             email: '',
             phone: '',
             password: '',
-            confirm_password: '',
+            re_password: '',
           }}
           validate={(values) => {
             const errors = {};
-            if (!values.first_name) errors.first_name = 'First name is required';
-            if (!values.last_name) errors.last_name = 'Last name is required';
+            if (!values.username) errors.username = 'Username is required';
             if (!values.email) errors.email = 'Email is required';
             else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email))
               errors.email = 'Invalid email';
@@ -40,14 +38,15 @@ const Register = () => {
             else if (!/^01[0125][0-9]{8}$/.test(values.phone))
               errors.phone = 'Invalid Egyptian phone';
             if (!values.password) errors.password = 'Password is required';
-            if (values.password !== values.confirm_password)
-              errors.confirm_password = 'Passwords must match';
+            if (values.password !== values.re_password)
+              errors.re_password = 'Passwords must match';
             return errors;
           }}
           onSubmit={async (values, { setSubmitting, resetForm, setStatus }) => {
             try {
-              const res = await axios.post('/register/', values);
-              setStatus({ success: res.data.message });
+              const res = await axios.post('/auth/users/', values);
+
+              setStatus({ success: "Registration successful!" });
               resetForm();
             } catch (err) {
               setStatus({
@@ -75,12 +74,11 @@ const Register = () => {
               {status?.error && <div className="alert alert-danger">{status.error}</div>}
 
               {[
-                ['first_name', 'First Name'],
-                ['last_name', 'Last Name'],
+                ['username', 'Username'],
                 ['email', 'Email'],
                 ['phone', 'Phone'],
                 ['password', 'Password'],
-                ['confirm_password', 'Confirm Password'],
+                ['re_password', 'Confirm Password'],
               ].map(([name, label], i) => (
                 <div className="mb-3" key={i}>
                   <label htmlFor={name} className="form-label text-white">{label}</label>

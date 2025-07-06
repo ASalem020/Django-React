@@ -1,6 +1,26 @@
-from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
 from django.db import models
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.validators import RegexValidator
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, email, phone, password=None, **extra_fields):
+        if not username:
+            raise ValueError('The Username is required')
+        if not email:
+            raise ValueError('The Email is required')
+        if not phone:
+            raise ValueError('The Phone is required')
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, phone=phone, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, phone, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(username, email, phone, password, **extra_fields)
+
 
 class User(AbstractUser):
     """

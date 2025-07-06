@@ -42,14 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'app.apps.AppConfig',
-    'project.apps.ProjectConfig',
+    'djoser',
+    'app',
+    'project',
     'donation',
 ]
 
 MIDDLEWARE = [
+     'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -96,10 +97,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv('DATABASE_URL'))
+# }
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'donation_db',
+        'USER': 'donation_user',
+        'PASSWORD': 'password123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
+
 
 
 # Password validation
@@ -141,4 +153,18 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DJOSER = {
+    "SERIALIZERS": {
+        "user_create": "app.serializers.CustomUserCreateSerializer",
+        "user": "app.serializers.CustomUserSerializer",
+    },
+    "VIEWSET_CLASS": "app.views.CustomUserViewSet", 
+}
+
+
+AUTH_USER_MODEL = 'app.User'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
