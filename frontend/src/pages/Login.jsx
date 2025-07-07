@@ -1,10 +1,11 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import axios from '../apis/config';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { updateLoginState } = useOutletContext();
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -39,6 +40,7 @@ const Login = () => {
               // For now, simulate login success:
               localStorage.setItem('isLoggedIn', 'true');
               localStorage.setItem('userData', JSON.stringify({ name: values.username }));
+              if (updateLoginState) updateLoginState();
               const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
               localStorage.removeItem('redirectAfterLogin');
               navigate(redirectPath);

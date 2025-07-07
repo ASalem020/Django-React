@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 export default function Home() {
+  const { isLoggedIn, userData } = useOutletContext();
   const [projects, setProjects] = useState([]);
-  const [userData, setUserData] = useState({
-    name: "Ahmed Salem",
-    email: "ahmed@example.com",
-  });
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("redirectAfterLogin");
-    setIsLoggedIn(false);
-    setUserData(null);
-  };
   const navigate = useNavigate();
 
   const handleDonateClick = (projectId) => {
@@ -27,11 +16,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Replace dummyProjects with fetch from backend (to be implemented)
-    // Use userData from context (to be implemented)
-    // Only show Edit/Delete if user is owner
-    // Only allow donate if logged in
-        const dummyProjects = [
+    // Fetch projects from backend here
+    const dummyProjects = [
       {
         id: 1,
         title: "Build a School",
@@ -58,7 +44,6 @@ export default function Home() {
       },
     ];
     setProjects(dummyProjects);
-
   }, []);
 
   return (
@@ -68,7 +53,7 @@ export default function Home() {
         {projects.map((project) => {
           const { id, title, description, image, donation, target, userId } = project;
           const progress = Math.min(Math.round((donation / target) * 100), 100);
-          const isOwner = true; // userId === loggedInUserId;
+          const isOwner = true; // userId === userData?.id;
 
           return (
             <div className="col-md-4" key={id}>

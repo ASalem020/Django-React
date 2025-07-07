@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 
@@ -6,14 +6,17 @@ export default function Layout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
+  // Function to update login state from children
+  const updateLoginState = useCallback(() => {
     const loginStatus = localStorage.getItem("isLoggedIn");
     const user = JSON.parse(localStorage.getItem("userData"));
-    if (loginStatus && user) {
-      setIsLoggedIn(true);
-      setUserData(user);
-    }
+    setIsLoggedIn(!!loginStatus);
+    setUserData(user);
   }, []);
+
+  useEffect(() => {
+    updateLoginState();
+  }, [updateLoginState]);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -30,7 +33,7 @@ export default function Layout() {
         userData={userData}
         handleLogout={handleLogout}
       />
-      <Outlet context={{ isLoggedIn, userData }} />
+      <Outlet context={{ isLoggedIn, userData, updateLoginState }} />
     </>
   );
 } 

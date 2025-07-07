@@ -1,7 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar({ isLoggedIn, userData, handleLogout }) {
+  const navigate = useNavigate();
+
+  const handleProtectedClick = (path) => {
+    if (!isLoggedIn) {
+      localStorage.setItem("redirectAfterLogin", path);
+      navigate("/login");
+    } else {
+      navigate(path);
+    }
+  };
+
+  const handleLogoutAndRedirect = () => {
+    handleLogout();
+    navigate("/");
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div className="container">
@@ -22,14 +38,22 @@ export default function Navbar({ isLoggedIn, userData, handleLogout }) {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/create-project">
+              <span
+                className="nav-link"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleProtectedClick("/create-project")}
+              >
                 Create Project
-              </Link>
+              </span>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/my-projects">
+              <span
+                className="nav-link"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleProtectedClick("/my-projects")}
+              >
                 View My Projects
-              </Link>
+              </span>
             </li>
           </ul>
           <Link className="navbar-brand col-2" to="/">
@@ -49,7 +73,7 @@ export default function Navbar({ isLoggedIn, userData, handleLogout }) {
                 <li className="nav-item">
                   <button
                     className="btn btn-outline-light btn-sm ms-2"
-                    onClick={handleLogout}
+                    onClick={handleLogoutAndRedirect}
                   >
                     Logout
                   </button>
