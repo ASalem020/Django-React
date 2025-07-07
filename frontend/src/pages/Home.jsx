@@ -31,6 +31,34 @@ export default function Home() {
     // Use userData from context (to be implemented)
     // Only show Edit/Delete if user is owner
     // Only allow donate if logged in
+        const dummyProjects = [
+      {
+        id: 1,
+        title: "Build a School",
+        description: "Help build a school in rural Egypt.",
+        image: "https://picsum.photos/300/180?random=1",
+        donation: 3500,
+        target: 10000,
+      },
+      {
+        id: 2,
+        title: "Water Wells Project",
+        description: "Provide clean water to remote villages.",
+        image: "https://picsum.photos/300/180?random=2",
+        donation: 9000,
+        target: 12000,
+      },
+      {
+        id: 3,
+        title: "Medical Aid",
+        description: "Donate for basic medical supplies.",
+        image: "https://picsum.photos/300/180?random=3",
+        donation: 7000,
+        target: 7000,
+      },
+    ];
+    setProjects(dummyProjects);
+
   }, []);
 
   return (
