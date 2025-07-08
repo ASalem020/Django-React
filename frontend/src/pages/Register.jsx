@@ -44,7 +44,7 @@ const Register = () => {
           }}
           onSubmit={async (values, { setSubmitting, resetForm, setStatus }) => {
             try {
-              const res = await axios.post('/auth/users/', values);
+              const res = await axios.post('/auth/users/', values );
 
               setStatus({ success: "Registration successful!" });
               resetForm();
@@ -78,7 +78,6 @@ const Register = () => {
                 ['email', 'Email'],
                 ['phone', 'Phone'],
                 ['password', 'Password'],
-                ['re_password', 'Confirm Password'],
               ].map(([name, label], i) => (
                 <div className="mb-3" key={i}>
                   <label htmlFor={name} className="form-label text-white">{label}</label>
