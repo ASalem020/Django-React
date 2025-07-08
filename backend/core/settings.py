@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-     'corsheaders.middleware.CorsMiddleware', 
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,11 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",   
-    "http://127.0.0.1:3000", 
-    "http://localhost:5173",  
-]
+CORS_ALLOWED_ِALL_ORIGINS = True # Allow all origins for development purposes
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -73,6 +70,27 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+DJOSER = {
+    "SERIALIZERS": {
+        "user_create": "app.serializers.CustomUserCreateSerializer",
+        "user": "app.serializers.CustomUserSerializer",
+        "current_user": "app.serializers.CustomUserSerializer",
+        "token_obtain_pair": "app.serializers.CustomTokenObtainPairSerializer",
+    },
+    "PERMISSIONS": {
+        "user_create": ["rest_framework.permissions.AllowAny"],
+        "user": ["rest_framework.permissions.IsAuthenticated"],
+    },
+    "LOGIN_FIELD": "username", 
+    "VIEWSET_CLASS": "app.views.CustomUserViewSet", 
+    }
 
 ROOT_URLCONF = 'core.urls'
 
@@ -94,23 +112,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+#Database
+#https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.getenv('DATABASE_URL'))
-# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'donation_db',
-        'USER': 'donation_user',
-        'PASSWORD': 'password123',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'))
 }
+
 
 
 
@@ -153,18 +162,4 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-
-DJOSER = {
-    "SERIALIZERS": {
-        "user_create": "app.serializers.CustomUserCreateSerializer",
-        "user": "app.serializers.CustomUserSerializer",
-    },
-    "VIEWSET_CLASS": "app.views.CustomUserViewSet", 
-}
-
-
 AUTH_USER_MODEL = 'app.User'
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]

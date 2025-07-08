@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from .models import User  
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
@@ -32,3 +32,10 @@ class CustomUserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = User
         fields = ['id', 'username', 'email', 'phone']
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user'] = CustomUserSerializer(self.user).data
+        return data

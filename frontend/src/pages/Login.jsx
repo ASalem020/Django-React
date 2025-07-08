@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import axios from '../apis/config';
+import axios from '../apis/config'; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,22 +33,30 @@ const Login = () => {
             if (!values.password) errors.password = 'Password is required';
             return errors;
           }}
+
           onSubmit={async (values, { setSubmitting, setStatus }) => {
             try {
-              // Replace with your backend login endpoint
-              // const res = await axios.post('/auth/login/', values);
-              // For now, simulate login success:
-              localStorage.setItem('isLoggedIn', 'true');
-              localStorage.setItem('userData', JSON.stringify({ name: values.username }));
+              const res = await axios.post('/auth/jwt/create/', {
+                username: values.username,
+                password: values.password,
+              });
+              const { access, refresh } = res.data;
+              localStorage.setItem('access_token', access);
+              localStorage.setItem('refresh_token', refresh);
+              axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+
+              // Update the login state in the parent component
               if (updateLoginState) updateLoginState();
               const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
               localStorage.removeItem('redirectAfterLogin');
               navigate(redirectPath);
-            } catch (err) {
-              setStatus({
-                error: 'Login failed. Please check your credentials.'
-              });
-            }
+            } catch (error) {
+                let errorMessage = 'Login failed. Please check your credentials.';
+                if (error.response?.status === 401) {
+                  errorMessage = 'Invalid username or password';
+                }
+                setStatus({ error: errorMessage });
+              }
             setSubmitting(false);
           }}
         >
