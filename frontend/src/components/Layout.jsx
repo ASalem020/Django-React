@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import api from "../apis/config";
 
 export default function Layout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate(); 
 
   // Function to update login state from children
   const updateLoginState = useCallback(() => {
@@ -24,6 +26,7 @@ export default function Layout() {
     localStorage.removeItem("redirectAfterLogin");
     setIsLoggedIn(false);
     setUserData(null);
+    navigate("/");
   };
 
   return (
