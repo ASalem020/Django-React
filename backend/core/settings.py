@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'djoser',
     'app',
     'project',
-    'donation',
 ]
 
 MIDDLEWARE = [

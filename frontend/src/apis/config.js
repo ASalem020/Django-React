@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem('refresh_token');
-        const response = await axios.post('http://localhost:8000/api/auth/jwt/refresh/', {
+        const response = await axios.post('http://localhost:8000/auth/jwt/refresh/', {
           refresh: refreshToken,
         });
 

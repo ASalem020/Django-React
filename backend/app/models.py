@@ -23,11 +23,6 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    """
-    Custom User model extending Django's AbstractUser
-    Adds phone number field with Egyptian number validation
-    and makes email field unique.
-    """
     phone_regex = RegexValidator(
         regex=r'^01[0-9]{9}$',
         message="Please enter a valid Egyptian phone number (10 digits starting with 01)"
@@ -60,6 +55,19 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username} - {self.email}"
 
+    @property
+    def total_donations_made(self):     # Total Donations For User
+        from django.db.models import Sum
+        return self.donations_made.aggregate(
+            total=Sum('amount')
+        )['total'] or 0.00
+    
+    @property
+    def active_campaigns(self):   # Active Campaigns
+        from django.utils import timezone
+        return self.campaigns.filter(
+            end_date__gte=timezone.now().date()
+        )
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
