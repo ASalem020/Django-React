@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Campaign, Donation
 from .serializers import CampaignSerializer, DonationSerializer
@@ -9,7 +9,7 @@ from .permissions import IsOwnerOrReadOnly
 
 class CampaignViewSet(viewsets.ModelViewSet):
     serializer_class = CampaignSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]      
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['owner']
     search_fields = ['title', 'description']
