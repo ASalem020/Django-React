@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import axios from '../apis/config'; 
+import axios from 'axios'; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Login = () => {
 
           onSubmit={async (values, { setSubmitting, setStatus }) => {
             try {
-              const res = await axios.post('/auth/jwt/create/', {
+              const res = await axios.post('http://localhost:8000/auth/jwt/create/', {
                 username: values.username,
                 password: values.password,
               });
@@ -46,6 +46,8 @@ const Login = () => {
               axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
 
               // Update the login state in the parent component
+              localStorage.setItem('isLoggedIn', 'true');
+              localStorage.setItem('userData', JSON.stringify({ name: values.username }));
               if (updateLoginState) updateLoginState();
               const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
               localStorage.removeItem('redirectAfterLogin');

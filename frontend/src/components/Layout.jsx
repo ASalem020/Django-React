@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "./Navbar";
 import { Outlet, useNavigate } from "react-router-dom";
-import api from "../apis/config";
 
 export default function Layout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,6 +23,8 @@ export default function Layout() {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userData");
     localStorage.removeItem("redirectAfterLogin");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     setIsLoggedIn(false);
     setUserData(null);
     navigate("/");

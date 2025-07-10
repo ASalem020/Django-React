@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import axios from '../apis/config';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Alert, Stack, Typography, Box } from '@mui/material';
 import * as Yup from 'yup';
@@ -38,7 +38,7 @@ const CreateProject = () => {
         validationSchema={campaignSchema}
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           try {
-            await axios.post('/api/campaigns/', {
+            await axios.post('http://localhost:8000/api/campaigns/', {
               ...values,
               target_amount: parseFloat(values.target_amount)
             }, {
@@ -47,7 +47,7 @@ const CreateProject = () => {
               }
             });
             setStatus({ success: 'Campaign created successfully!' });
-            setTimeout(() => navigate('/my-projects'), 1500);
+            setTimeout(() => navigate('/'), 1500);
           } catch (error) {
             setStatus({
               error: error.response?.data?.message || 'Failed to create campaign'

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../apis/config';
-import { Box, Typography, Card, CardContent, CardMedia, Button, LinearProgress, Grid } from '@mui/material';
+import axios from 'axios';
 
 export default function MyProjects() {
   const [campaigns, setCampaigns] = useState([]);
@@ -11,66 +10,187 @@ export default function MyProjects() {
   useEffect(() => {
     const fetchMyCampaigns = async () => {
       try {
-        const response = await axios.get('/api/campaigns/mine/');
+        const token = localStorage.getItem('access_token');
+        const response = await axios.get('http://localhost:8000/api/campaigns/mine/', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         setCampaigns(response.data);
       } catch (error) {
         console.error('Error fetching campaigns:', error);
+        if (error.response?.status === 401) {
+          alert('Please log in to view your campaigns.');
+          navigate('/login');
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchMyCampaigns();
-  }, []);
+  }, [navigate]);
 
-  if (loading) return <Typography>Loading your campaigns...</Typography>;
+  const handleDelete = (campaignId) => {
+    if (window.confirm('Are you sure you want to delete this campaign?')) {
+      const token = localStorage.getItem('access_token');
+      axios.delete(`http://localhost:8000/api/campaigns/${campaignId}/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(() => {
+        // Refresh the campaigns list
+        const fetchMyCampaigns = async () => {
+          try {
+            const response = await axios.get('http://localhost:8000/api/campaigns/mine/', {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            setCampaigns(response.data);
+          } catch (error) {
+            console.error('Error fetching campaigns:', error);
+          }
+        };
+        fetchMyCampaigns();
+      })
+      .catch(err => {
+        console.error('Error deleting campaign:', err);
+        alert('Failed to delete campaign. Please try again.');
+      });
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  };
+
+  if (loading) {
+    return (
+      <div className="container mt-4">
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-2">Loading your campaigns...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>My Campaigns</Typography>
+    <div className="container mt-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0">My Campaigns</h2>
+        <span className="badge bg-primary fs-6">
+          {campaigns.length} Campaign{campaigns.length !== 1 ? 's' : ''}
+        </span>
+      </div>
       
       {campaigns.length === 0 ? (
-        <Typography>You haven't created any campaigns yet.</Typography>
+        <div className="text-center py-5">
+          <h4 className="text-muted mb-3">You haven't created any campaigns yet.</h4>
+          <p className="text-muted mb-4">Start your crowdfunding journey by creating your first campaign!</p>
+          <button 
+            className="btn btn-primary btn-lg"
+            onClick={() => navigate('/create-project')}
+          >
+            🚀 Create Your First Campaign
+          </button>
+        </div>
       ) : (
-        <Grid container spacing={3}>
-          {campaigns.map((campaign) => (
-            <Grid item xs={12} sm={6} md={4} key={campaign.id}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <CardMedia
-                  component="img"
-                  height="180"
-                  image={campaign.image || "https://picsum.photos/300/180"}
-                  alt={campaign.title}
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5">{campaign.title}</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    {campaign.description}
-                  </Typography>
+        <div className="row">
+          {campaigns.map(campaign => (
+            <div key={campaign.id} className="col-lg-4 col-md-6 mb-4">
+              <div className="card h-100 shadow-sm">
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title fw-bold text-primary mb-2">
+                    {campaign.title}
+                  </h5>
                   
-                  <LinearProgress
-                    variant="determinate"
-                    value={campaign.progress_percentage}
-                    sx={{ height: 10, mb: 2 }}
-                  />
-                  
-                  <Box sx={{ display: 'flex', gap: 1 }}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={() => navigate(`/edit-campaign/${campaign.id}`)}
-                    >
-                      Edit
-                    </Button>
-                    <Button fullWidth variant="contained" color="error">
-                      Delete
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
+                  <p className="card-text text-muted mb-3 flex-grow-1">
+                    {campaign.description && campaign.description.length > 150 
+                      ? `${campaign.description.substring(0, 150)}...` 
+                      : campaign.description}
+                  </p>
+
+                  <div className="mb-3">
+                    <div className="row g-2">
+                      <div className="col-6">
+                        <small className="text-muted d-block">Start Date</small>
+                        <strong>{formatDate(campaign.start_date)}</strong>
+                      </div>
+                      <div className="col-6">
+                        <small className="text-muted d-block">End Date</small>
+                        <strong>{formatDate(campaign.end_date)}</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <small className="text-muted">Progress</small>
+                      <small className="text-muted">{campaign.progress_percentage || 0}%</small>
+                    </div>
+                    <div className="progress mb-2" style={{ height: '8px' }}>
+                      <div 
+                        className="progress-bar bg-success" 
+                        role="progressbar" 
+                        style={{ width: `${campaign.progress_percentage || 0}%` }}
+                        aria-valuenow={campaign.progress_percentage || 0} 
+                        aria-valuemin="0" 
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">Raised</small>
+                      <strong className="text-success">
+                        {formatCurrency(campaign.total_donations || 0)}
+                      </strong>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                      <small className="text-muted">Target</small>
+                      <strong className="text-primary">
+                        {formatCurrency(campaign.target_amount)}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="d-grid gap-2">
+                      <div className="d-flex gap-2">
+                        <button 
+                          className="btn btn-outline-primary btn-sm flex-fill"
+                          onClick={() => navigate(`/edit-campaign/${campaign.id}`)}
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          className="btn btn-outline-danger btn-sm flex-fill"
+                          onClick={() => handleDelete(campaign.id)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
-        </Grid>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

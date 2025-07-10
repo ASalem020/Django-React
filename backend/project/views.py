@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Campaign, Donation
 from .serializers import CampaignSerializer, DonationSerializer
 from .permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 class CampaignViewSet(viewsets.ModelViewSet):
     serializer_class = CampaignSerializer
@@ -36,7 +37,7 @@ class CampaignViewSet(viewsets.ModelViewSet):
 
 class DonationViewSet(viewsets.ModelViewSet):
     serializer_class = DonationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['campaign', 'donor']
 

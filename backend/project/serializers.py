@@ -8,7 +8,7 @@ class DonationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Donation
-        fields = ['id', 'amount', 'donation_date', 'message', 'donor', 'campaign_title']
+        fields = ['id', 'campaign', 'amount', 'donation_date', 'message', 'donor', 'campaign_title']
         read_only_fields = ['donor', 'donation_date']
 
 class CampaignSerializer(serializers.ModelSerializer):

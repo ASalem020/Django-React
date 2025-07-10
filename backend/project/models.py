@@ -14,7 +14,7 @@ class Campaign(models.Model):
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
 
     def __str__(self):
         return self.title
@@ -31,7 +31,10 @@ class Campaign(models.Model):
 
     @property
     def progress_percentage(self):
-        return min(round((self.total_donations / float(self.target_amount)) * 100), 100)
+        target = float(self.target_amount)
+        if target == 0:
+            return 0
+        return min(round((self.total_donations / target) * 100), 100)
 
     class Meta:
         ordering = ['-created_at']
@@ -44,7 +47,8 @@ class Donation(models.Model):
     message = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.donor.username} donated {self.amount} to {self.campaign.title}"
+        donor_name = self.donor.username if self.donor else "Anonymous"
+        return f"{donor_name} donated {self.amount} to {self.campaign.title}"
 
     class Meta:
         ordering = ['-donation_date']

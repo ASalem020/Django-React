@@ -1,8 +1,10 @@
 import React from 'react';
 import { Formik } from 'formik';
-import axios from '../apis/config';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
+  const navigate = useNavigate();
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -44,7 +46,7 @@ const Register = () => {
           }}
           onSubmit={async (values, { setSubmitting, resetForm, setStatus }) => {
             try {
-              const res = await axios.post('/auth/users/', values );
+              const res = await axios.post('http://localhost:8000/auth/users/', values );
 
               setStatus({ success: "Registration successful!" });
               resetForm();
@@ -78,6 +80,7 @@ const Register = () => {
                 ['email', 'Email'],
                 ['phone', 'Phone'],
                 ['password', 'Password'],
+                ['re_password', 'Confirm Password'],
               ].map(([name, label], i) => (
                 <div className="mb-3" key={i}>
                   <label htmlFor={name} className="form-label text-white">{label}</label>
@@ -100,6 +103,13 @@ const Register = () => {
 
               <button type="submit" disabled={isSubmitting} className="btn btn-primary w-100">
                 Register
+              </button>
+              <button
+                type="button"
+                className="btn btn-link w-100 mt-2 text-decoration-none text-primary"
+                onClick={() => navigate('/login')}
+              >
+                Already have an account? Login
               </button>
             </form>
           )}

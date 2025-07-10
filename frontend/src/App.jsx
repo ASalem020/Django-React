@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateProject from './pages/CreateProject';
 import MyProjects from './pages/MyProjects';
+import EditProject from './pages/EditProject';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="create-project" element={<CreateProject />} />
           <Route path="my-projects" element={<MyProjects />} />
+          <Route path="edit-campaign/:id" element={<EditProject />} />
         </Route>
       </Routes>
     </BrowserRouter>
