@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useTheme } from '../context/ThemeContext';
+
 const API = axios.create({
   baseURL: 'http://localhost:8000/api',
 });
@@ -24,6 +26,7 @@ const CampaignList = () => {
   const [donationAmount, setDonationAmount] = useState('');
   const [donationLoading, setDonationLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     fetchCampaigns();
@@ -202,226 +205,467 @@ const CampaignList = () => {
 
   if (loading) {
     return (
-      <div className="container mt-4">
+      <div className="glass-home-bg min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-          <p className="mt-2">Loading campaigns...</p>
+          <p className="mt-2 text-white">Loading campaigns...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0">All Campaigns</h2>
-        <span className="badge bg-primary fs-6">
-          {filteredCampaigns.length} Campaign{filteredCampaigns.length !== 1 ? 's' : ''}
-        </span>
-      </div>
+    <>
+      {/* Hero Section */}
+      <section style={{
+        paddingInline: '100px',
+        minHeight: '100vh',
+        background: isDarkMode ? '#232136' : '#f8f9fa',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background Pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: isDarkMode 
+            ? 'radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%)'
+            : 'radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.05) 0%, transparent 50%)',
+          zIndex: 1
+        }}></div>
 
-      {/* Search Bar */}
-      <div className="mb-4">
-        <div className="row justify-content-center">
-          <div className="col-md-6 col-lg-4">
-            <div className="input-group">
-              <input
-                type="date"
-                className="form-control"
-                placeholder="Search by start date..."
-                value={searchDate}
-                onChange={(e) => setSearchDate(e.target.value)}
-              />
-              {searchDate && (
+        <div className="container position-relative" style={{ zIndex: 2 }}>
+          <div className="row align-items-center">
+            <div className="col-lg-6 text-center text-lg-start">
+              <div className="glass-card p-5" style={{
+                background: isDarkMode 
+                  ? 'rgba(40, 38, 60, 0.8)' 
+                  : 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(20px)',
+                borderRadius: '24px',
+                border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                boxShadow: isDarkMode 
+                  ? '0 25px 50px -12px rgba(31, 38, 135, 0.37)' 
+                  : '0 25px 50px -12px rgba(0, 0, 0, 0.1)'
+              }}>
+                <h1 className="display-4 fw-bold mb-4" style={{
+                  color: isDarkMode ? '#fff' : '#212529',
+                  textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
+                }}>
+                  🚀 Transform Ideas Into Reality
+                </h1>
+                <p className="lead mb-4" style={{
+                  color: isDarkMode ? '#e9ecef' : '#6c757d',
+                  fontSize: '1.25rem',
+                  lineHeight: '1.6'
+                }}>
+                  Join the future of fundraising with our innovative crowdfunding platform. 
+                  Connect with passionate creators, support meaningful projects, and be part 
+                  of something extraordinary.
+                </p>
+                <div className="row text-center mb-4">
+                  <div className="col-4">
+                    <div className="d-flex flex-column align-items-center">
+                      <span style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>💡</span>
+                      <span style={{ 
+                        fontSize: '0.9rem', 
+                        color: isDarkMode ? '#adb5bd' : '#6c757d',
+                        fontWeight: '500'
+                      }}>Innovation</span>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div className="d-flex flex-column align-items-center">
+                      <span style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🤝</span>
+                      <span style={{ 
+                        fontSize: '0.9rem', 
+                        color: isDarkMode ? '#adb5bd' : '#6c757d',
+                        fontWeight: '500'
+                      }}>Community</span>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    <div className="d-flex flex-column align-items-center">
+                      <span style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎯</span>
+                      <span style={{ 
+                        fontSize: '0.9rem', 
+                        color: isDarkMode ? '#adb5bd' : '#6c757d',
+                        fontWeight: '500'
+                      }}>Impact</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                  <button 
+                    className="btn btn-primary btn-lg px-4 py-3"
+                    onClick={() => document.getElementById('campaigns-section').scrollIntoView({ behavior: 'smooth' })}
+                    style={{
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      border: 'none',
+                      borderRadius: '12px',
+                      fontWeight: '600',
+                      boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    🎉 Explore Campaigns
+                  </button>
+                  <button 
+                    className="btn btn-outline-secondary btn-lg px-4 py-3"
+                    onClick={() => window.location.href = '/create-project'}
+                    style={{
+                      border: `2px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
+                      borderRadius: '12px',
+                      fontWeight: '600',
+                      color: isDarkMode ? '#fff' : '#212529',
+                      background: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                      backdropFilter: 'blur(10px)',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    ➕ Start Your Project
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 text-center mt-5 mt-lg-0">
+              <div className="position-relative">
+                                 <div className="glass-card p-4 float-animation" style={{
+                   background: isDarkMode 
+                     ? 'rgba(40, 38, 60, 0.6)' 
+                     : 'rgba(255, 255, 255, 0.8)',
+                   backdropFilter: 'blur(15px)',
+                   borderRadius: '20px',
+                   border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                   transform: 'rotate(3deg)'
+                 }}>
+                  <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>💰</div>
+                  <h3 style={{ 
+                    color: isDarkMode ? '#fff' : '#212529',
+                    marginBottom: '0.5rem'
+                  }}>Active Campaigns</h3>
+                  <p style={{ 
+                    color: isDarkMode ? '#adb5bd' : '#6c757d',
+                    marginBottom: '0'
+                  }}>{campaigns.length} projects seeking support</p>
+                </div>
+                                 <div className="glass-card p-4 position-absolute float-animation-reverse" style={{
+                   background: isDarkMode 
+                     ? 'rgba(40, 38, 60, 0.6)' 
+                     : 'rgba(255, 255, 255, 0.8)',
+                   backdropFilter: 'blur(15px)',
+                   borderRadius: '20px',
+                   border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                   transform: 'rotate(-2deg) translateY(-20px)',
+                   top: '-20px',
+                   right: '-20px',
+                   zIndex: -1
+                 }}>
+                  <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🎯</div>
+                  <h4 style={{ 
+                    color: isDarkMode ? '#fff' : '#212529',
+                    marginBottom: '0',
+                    fontSize: '1rem'
+                  }}>Success Rate</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Campaigns Section */}
+      <section id="campaigns-section" className="glass-home-bg py-5">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex align-items-center">
+              <h2 className="mb-0 text-white">All Campaigns</h2>
+              <span className="badge bg-primary fs-6 ms-3" style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '8px 16px'
+              }}>
+                {filteredCampaigns.length} Campaign{filteredCampaigns.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+
+            {/* Search Bar - Moved to the right */}
+            <div className="d-flex align-items-center">
+              <div className="input-group" style={{ maxWidth: '300px' }}>
+                <span className="input-group-text" style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRight: 'none',
+                  borderRadius: '12px 0 0 12px',
+                  backdropFilter: 'blur(10px)',
+                  color: '#fff'
+                }}>
+                  📅
+                </span>
+                <input
+                  type="date"
+                  className="form-control"
+                  placeholder="Search by start date..."
+                  value={searchDate}
+                  onChange={(e) => setSearchDate(e.target.value)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '0 12px 12px 0',
+                    backdropFilter: 'blur(10px)',
+                    color: '#fff',
+                    transition: 'all 0.3s ease'
+                  }}
+                />
+                {searchDate && (
+                  <button 
+                    className="btn btn-outline-secondary" 
+                    onClick={clearSearch}
+                    title="Clear search"
+                    style={{
+                      position: 'absolute',
+                      right: '8px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10,
+                      background: 'rgba(255, 255, 255, 0.2)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px'
+                    }}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Search Results Info */}
+          {searchDate && (
+            <div className="mb-4">
+              <div className="alert alert-info d-flex align-items-center" style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '12px',
+                backdropFilter: 'blur(10px)',
+                color: '#fff'
+              }}>
+                <span className="me-2">🔍</span>
+                <span>Showing campaigns starting on <strong>{formatDate(searchDate)}</strong></span>
                 <button 
-                  className="btn btn-outline-secondary" 
+                  className="btn btn-sm btn-outline-light ms-auto"
                   onClick={clearSearch}
-                  title="Clear search"
+                  style={{
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)'
+                  }}
                 >
-                  ✕
+                  Clear Search
+                </button>
+              </div>
+            </div>
+          )}
+
+          {filteredCampaigns.length === 0 ? (
+            <div className="text-center py-5">
+              <h4 className="">
+                {searchDate ? 'No campaigns found for the selected date' : 'No campaigns found'}
+              </h4>
+              <p className="">
+                {searchDate ? 'Try selecting a different date or clear the search.' : 'Be the first to create a campaign!'}
+              </p>
+              {searchDate && (
+                <button className="btn btn-outline-primary mt-2" onClick={clearSearch}>
+                  Clear Search
                 </button>
               )}
             </div>
-            {searchDate && (
-              <small className="text-muted mt-1 d-block">
-                Showing campaigns starting on {formatDate(searchDate)}
-              </small>
-            )}
-          </div>
-        </div>
-      </div>
+          ) : (
+            <div className="row">
+              {filteredCampaigns.map(campaign => (
+                <div key={campaign.id} className="col-lg-4 col-md-6 mb-4">
+                  <div className="glass-card card h-100 shadow-sm">
+                    <div className="card-body d-flex flex-column">
+                      <h5 className="card-title fw-bold text-primary mb-2">
+                        {campaign.title}
+                      </h5>
+                      <p className="card-text  mb-3 flex-grow-1">
+                        {campaign.description && campaign.description.length > 150 
+                          ? `${campaign.description.substring(0, 150)}...` 
+                          : campaign.description}
+                      </p>
+                      <div className="mb-3">
+                        <div className="row g-2">
+                          <div className="col-6">
+                            <small className=" d-block">Start Date</small>
+                            <strong>{formatDate(campaign.start_date)}</strong>
+                          </div>
+                          <div className="col-6">
+                            <small className=" d-block">End Date</small>
+                            <strong>{formatDate(campaign.end_date)}</strong>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mb-3">
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                          <small className="">Progress</small>
+                          <small className="">{campaign.progress_percentage || 0}%</small>
+                        </div>
+                        <div className="progress mb-2" style={{ height: '8px' }}>
+                          <div 
+                            className="progress-bar bg-success" 
+                            role="progressbar" 
+                            style={{ width: `${campaign.progress_percentage || 0}%` }}
+                            aria-valuenow={campaign.progress_percentage || 0} 
+                            aria-valuemin="0" 
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                          <small className="">Raised</small>
+                          <strong className="text-success">
+                            {formatCurrency(campaign.total_donations || 0)}
+                          </strong>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                          <small className="">Target</small>
+                          <strong className="text-primary">
+                            {formatCurrency(campaign.target_amount)}
+                          </strong>
+                        </div>
+                      </div>
+                      <div className="mt-auto">
+                        <div className="d-grid gap-2">
+                          <button 
+                            className="btn btn-dark btn-sm mb-2"
+                            onClick={() => handleDonate(campaign.id)}
+                          >
+                            💰 Donate
+                          </button>
+                          {currentUser && campaign.owner === currentUser.username && (
+                            <div className="d-flex gap-2">
+                              <button 
+                                className="btn btn-outline-primary btn-sm flex-fill"
+                                onClick={() => handleEdit(campaign.id)}
+                              >
+                                ✏️ Edit
+                              </button>
+                              <button 
+                                className="btn btn-outline-danger btn-sm flex-fill"
+                                onClick={() => handleDelete(campaign.id)}
+                              >
+                                🗑️ Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-      {filteredCampaigns.length === 0 ? (
-        <div className="text-center py-5">
-          <h4 className="text-muted">
-            {searchDate ? 'No campaigns found for the selected date' : 'No campaigns found'}
-          </h4>
-          <p className="text-muted">
-            {searchDate ? 'Try selecting a different date or clear the search.' : 'Be the first to create a campaign!'}
-          </p>
-          {searchDate && (
-            <button className="btn btn-outline-primary mt-2" onClick={clearSearch}>
-              Clear Search
-            </button>
+          {/* Donation Modal */}
+          {showDonationModal && selectedCampaign && (
+            <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="glass-card modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">💝 Make a Donation</h5>
+                    <button 
+                      type="button" 
+                      className="btn-close" 
+                      onClick={() => setShowDonationModal(false)}
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <div className="mb-3">
+                      <h6 className="text-primary">{selectedCampaign.title}</h6>
+                      <p className=" small mb-3">
+                        {selectedCampaign.description && selectedCampaign.description.length > 100 
+                          ? `${selectedCampaign.description.substring(0, 100)}...` 
+                          : selectedCampaign.description}
+                      </p>
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="donationAmount" className="form-label">Donation Amount ($)</label>
+                      <div className="input-group">
+                        <span className="input-group-text">$</span>
+                        <input
+                          type="number"
+                          className="form-control"
+                          id="donationAmount"
+                          placeholder="Enter amount"
+                          value={donationAmount}
+                          onChange={(e) => setDonationAmount(e.target.value)}
+                          min="1"
+                          step="0.01"
+                          required
+                        />
+                      </div>
+                      <div className="form-text">
+                        Minimum donation: $1.00
+                      </div>
+                    </div>
+                  </div>
+                  <div className="modal-footer">
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary" 
+                      onClick={() => setShowDonationModal(false)}
+                      disabled={donationLoading}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn btn-success" 
+                      onClick={submitDonation}
+                      disabled={donationLoading || !donationAmount || parseFloat(donationAmount) <= 0}
+                    >
+                      {donationLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          Processing...
+                        </>
+                      ) : (
+                        '💝 Donate Now'
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal Backdrop */}
+          {showDonationModal && (
+            <div className="modal-backdrop fade show"></div>
           )}
         </div>
-      ) : (
-        <div className="row">
-          {filteredCampaigns.map(campaign => (
-            <div key={campaign.id} className="col-lg-4 col-md-6 mb-4">
-              <div className="card h-100 shadow-sm">
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title fw-bold text-primary mb-2">
-                    {campaign.title}
-                  </h5>
-                  
-                  <p className="card-text text-muted mb-3 flex-grow-1">
-                    {campaign.description && campaign.description.length > 150 
-                      ? `${campaign.description.substring(0, 150)}...` 
-                      : campaign.description}
-                  </p>
+      </section>
 
-                  <div className="mb-3">
-                    <div className="row g-2">
-                      <div className="col-6">
-                        <small className="text-muted d-block">Start Date</small>
-                        <strong>{formatDate(campaign.start_date)}</strong>
-                      </div>
-                      <div className="col-6">
-                        <small className="text-muted d-block">End Date</small>
-                        <strong>{formatDate(campaign.end_date)}</strong>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <small className="text-muted">Progress</small>
-                      <small className="text-muted">{campaign.progress_percentage || 0}%</small>
-                    </div>
-                    <div className="progress mb-2" style={{ height: '8px' }}>
-                      <div 
-                        className="progress-bar bg-success" 
-                        role="progressbar" 
-                        style={{ width: `${campaign.progress_percentage || 0}%` }}
-                        aria-valuenow={campaign.progress_percentage || 0} 
-                        aria-valuemin="0" 
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">Raised</small>
-                      <strong className="text-success">
-                        {formatCurrency(campaign.total_donations || 0)}
-                      </strong>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">Target</small>
-                      <strong className="text-primary">
-                        {formatCurrency(campaign.target_amount)}
-                      </strong>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="d-grid gap-2">
-                      <button 
-                        className="btn btn-success btn-sm mb-2"
-                        onClick={() => handleDonate(campaign.id)}
-                      >
-                        💰 Donate
-                      </button>
-                      
-                    
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Donation Modal */}
-      {showDonationModal && selectedCampaign && (
-        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">💝 Make a Donation</h5>
-                <button 
-                  type="button" 
-                  className="btn-close" 
-                  onClick={() => setShowDonationModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <h6 className="text-primary">{selectedCampaign.title}</h6>
-                  <p className="text-muted small mb-3">
-                    {selectedCampaign.description && selectedCampaign.description.length > 100 
-                      ? `${selectedCampaign.description.substring(0, 100)}...` 
-                      : selectedCampaign.description}
-                  </p>
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="donationAmount" className="form-label">Donation Amount ($)</label>
-                  <div className="input-group">
-                    <span className="input-group-text">$</span>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="donationAmount"
-                      placeholder="Enter amount"
-                      value={donationAmount}
-                      onChange={(e) => setDonationAmount(e.target.value)}
-                      min="1"
-                      step="0.01"
-                      required
-                    />
-                  </div>
-                  <div className="form-text">
-                    Minimum donation: $1.00
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
-                  onClick={() => setShowDonationModal(false)}
-                  disabled={donationLoading}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="button" 
-                  className="btn btn-success" 
-                  onClick={submitDonation}
-                  disabled={donationLoading || !donationAmount || parseFloat(donationAmount) <= 0}
-                >
-                  {donationLoading ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                      Processing...
-                    </>
-                  ) : (
-                    '💝 Donate Now'
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal Backdrop */}
-      {showDonationModal && (
-        <div className="modal-backdrop fade show"></div>
-      )}
-    </div>
+    </>
   );
 };
 

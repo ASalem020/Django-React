@@ -129,7 +129,7 @@ const EditProject = () => {
 
   if (loading) {
     return (
-      <div className="container mt-4">
+      <div className="glass-home-bg min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -142,139 +142,147 @@ const EditProject = () => {
 
   if (error && !loading) {
     return (
-      <div className="container mt-4">
-        <div className="alert alert-danger" role="alert">
-          <h4 className="alert-heading">Error</h4>
-          <p>{error}</p>
-          <hr />
-          <button 
-            className="btn btn-outline-danger"
-            onClick={() => navigate('/my-projects')}
-          >
-            Back to My Projects
-          </button>
+      <div className="glass-home-bg min-vh-100 py-4">
+        <div className="container">
+          <div className="glass-card card">
+            <div className="card-body">
+              <div className="alert alert-danger" role="alert">
+                <h4 className="alert-heading">Error</h4>
+                <p>{error}</p>
+                <hr />
+                <button 
+                  className="btn btn-outline-danger"
+                  onClick={() => navigate('/my-projects')}
+                >
+                  Back to My Projects
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mt-4">
-      <div className="row justify-content-center">
-        <div className="col-lg-8">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">
-              <h3 className="mb-0">✏️ Edit Campaign</h3>
-            </div>
-            <div className="card-body">
-              {success && (
-                <div className="alert alert-success alert-dismissible fade show" role="alert">
-                  <strong>Success!</strong> {success}
-                  <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-              )}
+    <div className="glass-home-bg min-vh-100 py-4">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <div className="glass-card card shadow">
+              <div className="card-header bg-primary">
+                <h3 className="mb-0">✏️ Edit Campaign</h3>
+              </div>
+              <div className="card-body">
+                {success && (
+                  <div className="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> {success}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+                  </div>
+                )}
 
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="title" className="form-label">Campaign Title *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    placeholder="Enter campaign title"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="description" className="form-label">Description *</label>
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    rows="4"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Describe your campaign..."
-                    required
-                  ></textarea>
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="target_amount" className="form-label">Target Amount ($) *</label>
-                  <div className="input-group">
-                    <span className="input-group-text">$</span>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="title" className="form-label">Campaign Title *</label>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
-                      id="target_amount"
-                      name="target_amount"
-                      value={formData.target_amount}
+                      id="title"
+                      name="title"
+                      value={formData.title}
                       onChange={handleChange}
-                      placeholder="Enter target amount"
-                      min="100"
-                      step="0.01"
+                      placeholder="Enter campaign title"
                       required
                     />
                   </div>
-                  <div className="form-text">Minimum amount: $100.00</div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label htmlFor="start_date" className="form-label">Start Date *</label>
-                    <input
-                      type="date"
+                  <div className="mb-3">
+                    <label htmlFor="description" className="form-label">Description *</label>
+                    <textarea
                       className="form-control"
-                      id="start_date"
-                      name="start_date"
-                      value={formData.start_date}
+                      id="description"
+                      name="description"
+                      rows="4"
+                      value={formData.description}
                       onChange={handleChange}
+                      placeholder="Describe your campaign..."
                       required
-                    />
+                    ></textarea>
                   </div>
-                  <div className="col-md-6 mb-3">
-                    <label htmlFor="end_date" className="form-label">End Date *</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      id="end_date"
-                      name="end_date"
-                      value={formData.end_date}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
 
-                <div className="d-flex gap-2">
-                  <button
-                    type="submit"
-                    className="btn btn-primary flex-fill"
-                    disabled={submitting}
-                  >
-                    {submitting ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                        Updating...
-                      </>
-                    ) : (
-                      '💾 Update Campaign'
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => navigate('/my-projects')}
-                    disabled={submitting}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+                  <div className="mb-3">
+                    <label htmlFor="target_amount" className="form-label">Target Amount ($) *</label>
+                    <div className="input-group">
+                      <span className="input-group-text">$</span>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id="target_amount"
+                        name="target_amount"
+                        value={formData.target_amount}
+                        onChange={handleChange}
+                        placeholder="Enter target amount"
+                        min="100"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                    <div className="form-text">Minimum amount: $100.00</div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="start_date" className="form-label">Start Date *</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="start_date"
+                        name="start_date"
+                        value={formData.start_date}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="end_date" className="form-label">End Date *</label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        id="end_date"
+                        name="end_date"
+                        value={formData.end_date}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="d-flex gap-2">
+                    <button
+                      type="submit"
+                      className="btn btn-primary flex-fill"
+                      disabled={submitting}
+                    >
+                      {submitting ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          Updating...
+                        </>
+                      ) : (
+                        '💾 Update Campaign'
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => navigate('/my-projects')}
+                      disabled={submitting}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

@@ -78,7 +78,7 @@ export default function MyProjects() {
 
   if (loading) {
     return (
-      <div className="container mt-4">
+      <div className="glass-home-bg min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -90,107 +90,109 @@ export default function MyProjects() {
   }
 
   return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0">My Campaigns</h2>
-        <span className="badge bg-primary fs-6">
-          {campaigns.length} Campaign{campaigns.length !== 1 ? 's' : ''}
-        </span>
-      </div>
-      
-      {campaigns.length === 0 ? (
-        <div className="text-center py-5">
-          <h4 className="text-muted mb-3">You haven't created any campaigns yet.</h4>
-          <p className="text-muted mb-4">Start your crowdfunding journey by creating your first campaign!</p>
-          <button 
-            className="btn btn-primary btn-lg"
-            onClick={() => navigate('/create-project')}
-          >
-            🚀 Create Your First Campaign
-          </button>
+    <div className="glass-home-bg min-vh-100 py-4">
+      <div className="container">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="mb-0">My Campaigns</h2>
+          <span className="badge bg-primary fs-6">
+            {campaigns.length} Campaign{campaigns.length !== 1 ? 's' : ''}
+          </span>
         </div>
-      ) : (
-        <div className="row">
-          {campaigns.map(campaign => (
-            <div key={campaign.id} className="col-lg-4 col-md-6 mb-4">
-              <div className="card h-100 shadow-sm">
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title fw-bold text-primary mb-2">
-                    {campaign.title}
-                  </h5>
-                  
-                  <p className="card-text text-muted mb-3 flex-grow-1">
-                    {campaign.description && campaign.description.length > 150 
-                      ? `${campaign.description.substring(0, 150)}...` 
-                      : campaign.description}
-                  </p>
+        
+        {campaigns.length === 0 ? (
+          <div className="text-center py-5">
+            <h4 className="mb-3">You haven't created any campaigns yet.</h4>
+            <p className="mb-4">Start your crowdfunding journey by creating your first campaign!</p>
+            <button 
+              className="btn btn-primary btn-lg"
+              onClick={() => navigate('/create-project')}
+            >
+              🚀 Create Your First Campaign
+            </button>
+          </div>
+        ) : (
+          <div className="row">
+            {campaigns.map(campaign => (
+              <div key={campaign.id} className="col-lg-4 col-md-6 mb-4">
+                <div className="glass-card card h-100 shadow-sm">
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title fw-bold text-primary mb-2">
+                      {campaign.title}
+                    </h5>
+                    
+                    <p className="card-text mb-3 flex-grow-1">
+                      {campaign.description && campaign.description.length > 150 
+                        ? `${campaign.description.substring(0, 150)}...` 
+                        : campaign.description}
+                    </p>
 
-                  <div className="mb-3">
-                    <div className="row g-2">
-                      <div className="col-6">
-                        <small className="text-muted d-block">Start Date</small>
-                        <strong>{formatDate(campaign.start_date)}</strong>
+                    <div className="mb-3">
+                      <div className="row g-2">
+                        <div className="col-6">
+                          <small className="d-block">Start Date</small>
+                          <strong>{formatDate(campaign.start_date)}</strong>
+                        </div>
+                        <div className="col-6">
+                          <small className="d-block">End Date</small>
+                          <strong>{formatDate(campaign.end_date)}</strong>
+                        </div>
                       </div>
-                      <div className="col-6">
-                        <small className="text-muted d-block">End Date</small>
-                        <strong>{formatDate(campaign.end_date)}</strong>
+                    </div>
+
+                    <div className="mb-3">
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <small>Progress</small>
+                        <small>{campaign.progress_percentage || 0}%</small>
+                      </div>
+                      <div className="progress mb-2" style={{ height: '8px' }}>
+                        <div 
+                          className="progress-bar bg-success" 
+                          role="progressbar" 
+                          style={{ width: `${campaign.progress_percentage || 0}%` }}
+                          aria-valuenow={campaign.progress_percentage || 0} 
+                          aria-valuemin="0" 
+                          aria-valuemax="100"
+                        ></div>
+                      </div>
+                      <div className="d-flex justify-content-between">
+                        <small>Raised</small>
+                        <strong className="text-success">
+                          {formatCurrency(campaign.total_donations || 0)}
+                        </strong>
+                      </div>
+                      <div className="d-flex justify-content-between">
+                        <small>Target</small>
+                        <strong className="text-primary">
+                          {formatCurrency(campaign.target_amount)}
+                        </strong>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mb-3">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <small className="text-muted">Progress</small>
-                      <small className="text-muted">{campaign.progress_percentage || 0}%</small>
-                    </div>
-                    <div className="progress mb-2" style={{ height: '8px' }}>
-                      <div 
-                        className="progress-bar bg-success" 
-                        role="progressbar" 
-                        style={{ width: `${campaign.progress_percentage || 0}%` }}
-                        aria-valuenow={campaign.progress_percentage || 0} 
-                        aria-valuemin="0" 
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">Raised</small>
-                      <strong className="text-success">
-                        {formatCurrency(campaign.total_donations || 0)}
-                      </strong>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <small className="text-muted">Target</small>
-                      <strong className="text-primary">
-                        {formatCurrency(campaign.target_amount)}
-                      </strong>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="d-grid gap-2">
-                      <div className="d-flex gap-2">
-                        <button 
-                          className="btn btn-outline-primary btn-sm flex-fill"
-                          onClick={() => navigate(`/edit-campaign/${campaign.id}`)}
-                        >
-                          ✏️ Edit
-                        </button>
-                        <button 
-                          className="btn btn-outline-danger btn-sm flex-fill"
-                          onClick={() => handleDelete(campaign.id)}
-                        >
-                          🗑️ Delete
-                        </button>
+                    <div className="mt-auto">
+                      <div className="d-grid gap-2">
+                        <div className="d-flex gap-2">
+                          <button 
+                            className="btn btn-outline-primary btn-sm flex-fill"
+                            onClick={() => navigate(`/edit-campaign/${campaign.id}`)}
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button 
+                            className="btn btn-outline-danger btn-sm flex-fill"
+                            onClick={() => handleDelete(campaign.id)}
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
