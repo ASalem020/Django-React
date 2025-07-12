@@ -20,146 +20,169 @@ export default function Navbar({ isLoggedIn, userData, handleLogout }) {
     navigate("/");
   };
 
-  // Dynamic styles based on theme
-  const navbarStyle = {
-    background: isDarkMode 
-      ? 'rgba(40, 38, 60, 0.95)' 
-      : 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(20px)',
-    borderBottom: isDarkMode 
-      ? '1px solid rgba(255, 255, 255, 0.1)' 
-      : '1px solid rgba(0, 0, 0, 0.1)',
-    boxShadow: isDarkMode 
-      ? '0 8px 32px 0 rgba(31, 38, 135, 0.37)' 
-      : '0 8px 32px 0 rgba(0, 0, 0, 0.1)'
+  // Unified pill button style for all nav items
+  const pillBtn = {
+    borderRadius: "999px",
+    padding: "8px 22px",
+    fontWeight: 600,
+    fontSize: "1rem",
+    border: "none",
+    background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
+    color: "#fff",
+    boxShadow: "0 4px 16px rgba(102,126,234,0.15)",
+    transition: "all 0.2s cubic-bezier(.4,2,.6,1)",
+    margin: "0 6px",
+    cursor: "pointer",
+    outline: "none"
   };
 
-  const textColor = isDarkMode ? '#fff' : '#212529';
-  const borderColor = isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)';
-  const glassBg = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+  const pillBtnHover = {
+    ...pillBtn,
+    // Keep the same background and color as default
+    // Only add lift and stronger shadow
+    boxShadow: "0 8px 32px rgba(102,126,234,0.22)",
+    transform: "translateY(-2px)"
+  };
+
+  const brandStyle = {
+    fontWeight: 900,
+    fontSize: "2rem",
+    letterSpacing: "-1px",
+    background: "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    textFillColor: "transparent",
+    textShadow: isDarkMode
+      ? "0 2px 8px rgba(31,38,135,0.18)"
+      : "0 2px 8px rgba(102,126,234,0.10)",
+    margin: 0
+  };
+
+  // Helper for hover effect
+  const handleHover = (e, hover) => {
+    Object.assign(e.target.style, hover ? pillBtnHover : pillBtn);
+  };
 
   return (
-    <nav className="navbar navbar-expand-lg sticky-top" style={navbarStyle}>
-      <div className="container">
+    <nav className="navbar navbar-expand-lg sticky-top" style={{
+      background: isDarkMode
+        ? "linear-gradient(120deg, rgba(40,38,60,0.95) 60%, rgba(120,119,198,0.15) 100%)"
+        : "linear-gradient(120deg, rgba(255,255,255,0.95) 60%, rgba(102,126,234,0.10) 100%)",
+      backdropFilter: "blur(24px)",
+      borderBottom: isDarkMode
+        ? "1px solid rgba(255,255,255,0.08)"
+        : "1px solid rgba(0,0,0,0.08)",
+      boxShadow: isDarkMode
+        ? "0 8px 32px 0 rgba(31,38,135,0.25)"
+        : "0 8px 32px 0 rgba(102,126,234,0.08)",
+      borderRadius: "0 0 32px 32px",
+      margin: "16px 24px 32px 24px",
+      padding: 0,
+      zIndex: 1000
+    }}>
+      <div className="container-fluid px-4">
+        <Link className="navbar-brand mx-auto order-lg-2" to="/" style={brandStyle}>
+          🚀 CrowdSpark
+        </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler order-lg-1"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
           style={{
-            border: `1px solid ${borderColor}`,
-            borderRadius: '8px'
+            border: "none",
+            background: "rgba(102,126,234,0.12)",
+            borderRadius: "12px",
+            padding: "6px 12px"
           }}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-
-        <div className="collapse navbar-collapse row" id="navbarNav">
-          <ul className="navbar-nav me-5 col-5">
+        <div className="collapse navbar-collapse order-lg-3" id="navbarNav">
+          <ul className="navbar-nav mx-auto align-items-center gap-lg-2">
             <li className="nav-item">
-              <Link className="nav-link active fw-semibold" to="/" style={{
-                color: textColor,
-                transition: 'all 0.3s ease',
-                borderRadius: '8px',
-                padding: '8px 16px',
-                margin: '0 4px'
-              }}>
+              <Link
+                className="nav-link fw-semibold"
+                to="/"
+                style={pillBtn}
+                onMouseEnter={e => handleHover(e, true)}
+                onMouseLeave={e => handleHover(e, false)}
+              >
                 🏠 Home
               </Link>
             </li>
             <li className="nav-item">
-              <span
+              <button
                 className="nav-link fw-semibold"
-                style={{ 
-                  cursor: "pointer",
-                  color: textColor,
-                  transition: 'all 0.3s ease',
-                  borderRadius: '8px',
-                  padding: '8px 16px',
-                  margin: '0 4px'
-                }}
+                style={pillBtn}
                 onClick={() => handleProtectedClick("/create-project")}
+                onMouseEnter={e => handleHover(e, true)}
+                onMouseLeave={e => handleHover(e, false)}
               >
                 ➕ Create Project
-              </span>
+              </button>
             </li>
             <li className="nav-item">
-              <span
+              <button
                 className="nav-link fw-semibold"
-                style={{ 
-                  cursor: "pointer",
-                  color: textColor,
-                  transition: 'all 0.3s ease',
-                  borderRadius: '8px',
-                  padding: '8px 16px',
-                  margin: '0 4px'
-                }}
+                style={pillBtn}
                 onClick={() => handleProtectedClick("/my-projects")}
+                onMouseEnter={e => handleHover(e, true)}
+                onMouseLeave={e => handleHover(e, false)}
               >
                 📋 My Projects
-              </span>
+              </button>
             </li>
           </ul>
-          <Link className="navbar-brand col-2 text-center" to="/" style={{
-            color: textColor,
-            fontWeight: 'bold',
-            fontSize: '1.5rem',
-            textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
-            🚀 CrowdSpark
-          </Link>
-          <ul className="navbar-nav ms-auto col-2 align-items-center">
+          <ul className="navbar-nav ms-auto align-items-center gap-2">
             {isLoggedIn ? (
               <>
                 <li className="nav-item">
                   <span
                     style={{ 
-                      width: 130,
-                      color: textColor,
-                      fontWeight: '500',
-                      padding: '8px 8px',
-                      borderRadius: '8px',
-                      background: glassBg,
-                      backdropFilter: 'blur(10px)',
-                      border: `1px solid ${borderColor}`
+                      ...pillBtn,
+                      minWidth: 120,
+                      display: "inline-block",
+                      textAlign: "center",
+                      cursor: "default"
                     }}
                     className="nav-link"
                   >
                     👤 {userData?.name}
                   </span>
                 </li>
-                <li className="nav-item me-2">
+                <li className="nav-item">
                   <button
-                    className="btn btn-outline-secondary btn-sm"
+                    className="btn"
                     onClick={handleLogoutAndRedirect}
-                    style={{
-                      margin: '0 4px',
-                      padding: '10px 10px',
-                      borderRadius: '8px',
-                      border: `1px solid ${borderColor}`,
-                      background: glassBg,
-                      backdropFilter: 'blur(10px)',
-                      transition: 'all 0.3s ease',
-                      fontWeight: '500',
-                      color: textColor
-                    }}
+                    style={pillBtn}
+                    onMouseEnter={e => handleHover(e, true)}
+                    onMouseLeave={e => handleHover(e, false)}
                   >
                      Logout
                   </button>
                 </li>
-                {/* Theme Toggle Button */}
                 <li className="nav-item">
                   <button
-                    className="theme-toggle-btn"
+                    className="btn"
                     onClick={toggleTheme}
                     title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
                     style={{
-                      background: glassBg,
-                      border: `1px solid ${borderColor}`,
-                      backdropFilter: 'blur(10px)',
-                      borderRadius: '8px',
-                      color: textColor
+                      ...pillBtn,
+                      width: 44,
+                      height: 44,
+                      padding: 0,
+                      fontSize: "1.3rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
                     }}
+                    onMouseEnter={e => handleHover(e, true)}
+                    onMouseLeave={e => handleHover(e, false)}
                   >
                     {isDarkMode ? "☀️" : "🌙"}
                   </button>
@@ -167,29 +190,34 @@ export default function Navbar({ isLoggedIn, userData, handleLogout }) {
               </>
             ) : (
               <>
-                <li className="nav-item me-2">
-                  <Link className="nav-link fw-semibold" to="/login" style={{
-                    color: textColor,
-                    transition: 'all 0.3s ease',
-                    borderRadius: '8px',
-                    padding: '8px 16px'
-                  }}>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link fw-semibold"
+                    to="/login"
+                    style={pillBtn}
+                    onMouseEnter={e => handleHover(e, true)}
+                    onMouseLeave={e => handleHover(e, false)}
+                  >
                     🔐 Login
                   </Link>
                 </li>
-                {/* Theme Toggle Button */}
                 <li className="nav-item">
                   <button
-                    className="theme-toggle-btn"
+                    className="btn"
                     onClick={toggleTheme}
                     title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
                     style={{
-                      background: glassBg,
-                      border: `1px solid ${borderColor}`,
-                      backdropFilter: 'blur(10px)',
-                      borderRadius: '8px',
-                      color: textColor
+                      ...pillBtn,
+                      width: 44,
+                      height: 44,
+                      padding: 0,
+                      fontSize: "1.3rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
                     }}
+                    onMouseEnter={e => handleHover(e, true)}
+                    onMouseLeave={e => handleHover(e, false)}
                   >
                     {isDarkMode ? "☀️" : "🌙"}
                   </button>

@@ -173,7 +173,21 @@ const Login = () => {
                             border: 'none',
                             padding: '12px 24px',
                             fontWeight: '600',
-                            transition: 'all 0.3s ease'
+                            transition: 'all 0.3s ease',
+                            transform: 'translateY(0)',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isSubmitting) {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.4)';
+                              e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+                            e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
                           }}
                         >
                           {isSubmitting ? (

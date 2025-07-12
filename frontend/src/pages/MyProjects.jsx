@@ -106,6 +106,27 @@ export default function MyProjects() {
             <button 
               className="btn btn-primary btn-lg"
               onClick={() => navigate('/create-project')}
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none',
+                borderRadius: '12px',
+                fontWeight: '600',
+                boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
+                transition: 'all 0.3s ease',
+                padding: '12px 24px',
+                transform: 'translateY(0)',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.4)';
+                e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+                e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+              }}
             >
               🚀 Create Your First Campaign
             </button>
@@ -172,14 +193,56 @@ export default function MyProjects() {
                       <div className="d-grid gap-2">
                         <div className="d-flex gap-2">
                           <button 
-                            className="btn btn-outline-primary btn-sm flex-fill"
+                            className="btn btn-primary btn-sm flex-fill"
                             onClick={() => navigate(`/edit-campaign/${campaign.id}`)}
+                            style={{
+                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                              border: 'none',
+                              borderRadius: '12px',
+                              fontWeight: '600',
+                              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                              transition: 'all 0.3s ease',
+                              padding: '8px 16px',
+                              transform: 'translateY(0)',
+                              cursor: 'pointer'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+                              e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'translateY(0)';
+                              e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                              e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                            }}
                           >
                             ✏️ Edit
                           </button>
                           <button 
-                            className="btn btn-outline-danger btn-sm flex-fill"
+                            className="btn btn-primary btn-sm flex-fill"
                             onClick={() => handleDelete(campaign.id)}
+                            style={{
+                              background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)',
+                              border: 'none',
+                              borderRadius: '12px',
+                              fontWeight: '600',
+                              boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)',
+                              transition: 'all 0.3s ease',
+                              padding: '8px 16px',
+                              transform: 'translateY(0)',
+                              cursor: 'pointer'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 8px 25px rgba(255, 107, 107, 0.4)';
+                              e.target.style.background = 'linear-gradient(135deg, #ff5252 0%, #d32f2f 100%)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'translateY(0)';
+                              e.target.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
+                              e.target.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)';
+                            }}
                           >
                             🗑️ Delete
                           </button>

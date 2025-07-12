@@ -49,49 +49,49 @@ const CreateProject = () => {
                 <p className="text-white-50 mb-0">Start your crowdfunding journey today</p>
               </div>
               <div className="card-body p-5">
-                <Formik
-                  initialValues={{
-                    title: '',
-                    description: '',
-                    target_amount: '',
-                    start_date: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-                    end_date: '',
-                  }}
-                  validationSchema={campaignSchema}
+      <Formik
+        initialValues={{
+          title: '',
+          description: '',
+          target_amount: '',
+          start_date: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+          end_date: '',
+        }}
+        validationSchema={campaignSchema}
                   onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
-                    try {
-                      await axios.post('http://localhost:8000/api/campaigns/', {
-                        ...values,
-                        target_amount: parseFloat(values.target_amount)
-                      }, {
-                        headers: {
-                          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-                        }
-                      });
+          try {
+            await axios.post('http://localhost:8000/api/campaigns/', {
+              ...values,
+              target_amount: parseFloat(values.target_amount)
+            }, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+              }
+            });
                       setStatus({ success: 'Campaign created successfully! Redirecting to home...' });
                       resetForm();
                       setTimeout(() => navigate('/'), 2000);
-                    } catch (error) {
-                      setStatus({
+          } catch (error) {
+            setStatus({
                         error: error.response?.data?.message || 'Failed to create campaign. Please try again.'
-                      });
-                    } finally {
-                      setSubmitting(false);
-                    }
-                  }}
-                >
-                  {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    isSubmitting,
-                    status,
-                  }) => (
-                    <form onSubmit={handleSubmit}>
-                      {status?.success && (
+            });
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          status,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            {status?.success && (
                         <div className="alert alert-success alert-dismissible fade show shadow-sm" role="alert" style={{
                           borderRadius: '12px',
                           border: 'none',
@@ -103,8 +103,8 @@ const CreateProject = () => {
                           </div>
                           <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                         </div>
-                      )}
-                      {status?.error && (
+            )}
+            {status?.error && (
                         <div className="alert alert-danger alert-dismissible fade show shadow-sm" role="alert" style={{
                           borderRadius: '12px',
                           border: 'none',
@@ -126,14 +126,14 @@ const CreateProject = () => {
                         <div className="input-group input-group-lg shadow-sm">
                           <input
                             id="title"
-                            name="title"
+                name="title"
                             type="text"
                             className={`form-control ${errors.title && touched.title ? 'is-invalid' : ''}`}
                             placeholder="Enter your campaign title"
-                            value={values.title}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            required
+                value={values.title}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                required
                             style={{
                               borderRadius: '12px',
                               border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -159,14 +159,14 @@ const CreateProject = () => {
                         <div className="input-group input-group-lg shadow-sm">
                           <textarea
                             id="description"
-                            name="description"
+                name="description"
                             className={`form-control ${errors.description && touched.description ? 'is-invalid' : ''}`}
                             placeholder="Describe your campaign in detail..."
-                            value={values.description}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
+                value={values.description}
+                onChange={handleChange}
+                onBlur={handleBlur}
                             rows="4"
-                            required
+                required
                             style={{
                               borderRadius: '12px',
                               border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -199,16 +199,16 @@ const CreateProject = () => {
                           }}>$</span>
                           <input
                             id="target_amount"
-                            name="target_amount"
-                            type="number"
+                name="target_amount"
+                type="number"
                             className={`form-control ${errors.target_amount && touched.target_amount ? 'is-invalid' : ''}`}
                             placeholder="Enter target amount"
-                            value={values.target_amount}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
+                value={values.target_amount}
+                onChange={handleChange}
+                onBlur={handleBlur}
                             min="100"
                             step="0.01"
-                            required
+                required
                             style={{
                               borderRadius: '0 12px 12px 0',
                               border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -236,13 +236,13 @@ const CreateProject = () => {
                           <div className="input-group input-group-lg shadow-sm">
                             <input
                               id="start_date"
-                              name="start_date"
-                              type="date"
+                  name="start_date"
+                  type="date"
                               className={`form-control ${errors.start_date && touched.start_date ? 'is-invalid' : ''}`}
-                              value={values.start_date}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              required
+                  value={values.start_date}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
                               style={{
                                 borderRadius: '12px',
                                 border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -268,13 +268,13 @@ const CreateProject = () => {
                           <div className="input-group input-group-lg shadow-sm">
                             <input
                               id="end_date"
-                              name="end_date"
-                              type="date"
+                  name="end_date"
+                  type="date"
                               className={`form-control ${errors.end_date && touched.end_date ? 'is-invalid' : ''}`}
-                              value={values.end_date}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              required
+                  value={values.end_date}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
                               style={{
                                 borderRadius: '12px',
                                 border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -295,7 +295,7 @@ const CreateProject = () => {
 
                       <div className="d-grid gap-3 mt-5">
                         <button 
-                          type="submit" 
+                type="submit"
                           disabled={isSubmitting} 
                           className="btn btn-primary btn-lg shadow-lg"
                           style={{
@@ -304,7 +304,21 @@ const CreateProject = () => {
                             border: 'none',
                             padding: '12px 24px',
                             fontWeight: '600',
-                            transition: 'all 0.3s ease'
+                            transition: 'all 0.3s ease',
+                            transform: 'translateY(0)',
+                            cursor: 'pointer'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isSubmitting) {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.4)';
+                              e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+                            e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
                           }}
                         >
                           {isSubmitting ? (
@@ -323,7 +337,7 @@ const CreateProject = () => {
                           type="button"
                           className="btn btn-outline-secondary btn-lg"
                           onClick={() => navigate('/')}
-                          disabled={isSubmitting}
+                disabled={isSubmitting}
                           style={{
                             borderRadius: '12px',
                             border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -342,9 +356,9 @@ const CreateProject = () => {
                           Make sure all information is accurate before creating your campaign
                         </small>
                       </div>
-                    </form>
-                  )}
-                </Formik>
+          </form>
+        )}
+      </Formik>
               </div>
             </div>
           </div>

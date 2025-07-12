@@ -178,9 +178,9 @@ const EditProject = () => {
                       <strong>{error}</strong>
                     </div>
                   </div>
-                  <button 
+                <button 
                     className="btn btn-outline-secondary btn-lg mt-3"
-                    onClick={() => navigate('/my-projects')}
+                  onClick={() => navigate('/my-projects')}
                     style={{
                       borderRadius: '12px',
                       border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -190,8 +190,8 @@ const EditProject = () => {
                     }}
                   >
                     <span className="me-2">←</span>
-                    Back to My Projects
-                  </button>
+                  Back to My Projects
+                </button>
                 </div>
               </div>
             </div>
@@ -237,7 +237,7 @@ const EditProject = () => {
                   }}>
                     <div className="d-flex align-items-center">
                       <span className="me-2">✅</span>
-                      <strong>Success!</strong> {success}
+                    <strong>Success!</strong> {success}
                     </div>
                     <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
                   </div>
@@ -250,15 +250,15 @@ const EditProject = () => {
                       Campaign Title <span className="text-danger ms-1">*</span>
                     </label>
                     <div className="input-group input-group-lg shadow-sm">
-                      <input
+                    <input
                         id="title"
                         name="title"
-                        type="text"
-                        className="form-control"
+                      type="text"
+                      className="form-control"
                         placeholder="Enter your campaign title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
+                      value={formData.title}
+                      onChange={handleChange}
+                      required
                         style={{
                           borderRadius: '12px',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -276,15 +276,15 @@ const EditProject = () => {
                       Description <span className="text-danger ms-1">*</span>
                     </label>
                     <div className="input-group input-group-lg shadow-sm">
-                      <textarea
-                        id="description"
-                        name="description"
+                    <textarea
+                      id="description"
+                      name="description"
                         className="form-control"
                         placeholder="Describe your campaign in detail..."
-                        value={formData.description}
-                        onChange={handleChange}
+                      value={formData.description}
+                      onChange={handleChange}
                         rows="4"
-                        required
+                      required
                         style={{
                           borderRadius: '12px',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -339,14 +339,14 @@ const EditProject = () => {
                         Start Date <span className="text-danger ms-1">*</span>
                       </label>
                       <div className="input-group input-group-lg shadow-sm">
-                        <input
+                      <input
                           id="start_date"
                           name="start_date"
-                          type="date"
-                          className="form-control"
-                          value={formData.start_date}
-                          onChange={handleChange}
-                          required
+                        type="date"
+                        className="form-control"
+                        value={formData.start_date}
+                        onChange={handleChange}
+                        required
                           style={{
                             borderRadius: '12px',
                             border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -364,14 +364,14 @@ const EditProject = () => {
                         End Date <span className="text-danger ms-1">*</span>
                       </label>
                       <div className="input-group input-group-lg shadow-sm">
-                        <input
+                      <input
                           id="end_date"
                           name="end_date"
-                          type="date"
-                          className="form-control"
-                          value={formData.end_date}
-                          onChange={handleChange}
-                          required
+                        type="date"
+                        className="form-control"
+                        value={formData.end_date}
+                        onChange={handleChange}
+                        required
                           style={{
                             borderRadius: '12px',
                             border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -385,9 +385,9 @@ const EditProject = () => {
                   </div>
 
                   <div className="d-grid gap-3 mt-5">
-                    <button 
-                      type="submit" 
-                      disabled={submitting} 
+                    <button
+                      type="submit"
+                      disabled={submitting}
                       className="btn btn-primary btn-lg shadow-lg"
                       style={{
                         borderRadius: '12px',
@@ -395,7 +395,21 @@ const EditProject = () => {
                         border: 'none',
                         padding: '12px 24px',
                         fontWeight: '600',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        transform: 'translateY(0)',
+                        cursor: 'pointer'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!submitting) {
+                          e.target.style.transform = 'translateY(-2px)';
+                          e.target.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.4)';
+                          e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = 'translateY(0)';
+                        e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+                        e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
                       }}
                     >
                       {submitting ? (

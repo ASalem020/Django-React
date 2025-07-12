@@ -22,6 +22,7 @@ const CampaignList = () => {
   const [filteredCampaigns, setFilteredCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchDate, setSearchDate] = useState('');
+  const [dateInputFocused, setDateInputFocused] = useState(false); // <-- add this
   const [showDonationModal, setShowDonationModal] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [donationAmount, setDonationAmount] = useState('');
@@ -219,11 +220,21 @@ const CampaignList = () => {
     }
 
     const filtered = campaigns.filter(campaign => {
-      const campaignStartDate = new Date(campaign.start_date);
-      const searchDateObj = new Date(searchDate);
-      
-      // Compare only the date part (year, month, day)
-      return campaignStartDate.toDateString() === searchDateObj.toDateString();
+      try {
+        const campaignStartDate = new Date(campaign.start_date);
+        const searchDateObj = new Date(searchDate);
+        
+        // Handle invalid dates
+        if (isNaN(campaignStartDate.getTime()) || isNaN(searchDateObj.getTime())) {
+          return false;
+        }
+        
+        // Compare only the date part (year, month, day)
+        return campaignStartDate.toDateString() === searchDateObj.toDateString();
+      } catch (error) {
+        console.error('Error filtering campaign by date:', error);
+        return false;
+      }
     });
 
     setFilteredCampaigns(filtered);
@@ -343,7 +354,19 @@ const CampaignList = () => {
                       borderRadius: '12px',
                       fontWeight: '600',
                       boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      transform: 'translateY(0)',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.4)';
+                      e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.3)';
+                      e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
                     }}
                   >
                     🎉 Explore Campaigns
@@ -358,7 +381,21 @@ const CampaignList = () => {
                       color: isDarkMode ? '#fff' : '#212529',
                       background: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
                       backdropFilter: 'blur(10px)',
-                      transition: 'all 0.3s ease'
+                      transition: 'all 0.3s ease',
+                      transform: 'translateY(0)',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = `0 8px 25px ${isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.15)'}`;
+                      e.target.style.background = isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+                      e.target.style.border = `2px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.3)'}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = 'none';
+                      e.target.style.background = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+                      e.target.style.border = `2px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`;
                     }}
                   >
                     ➕ Start Your Project
@@ -428,59 +465,109 @@ const CampaignList = () => {
               </span>
             </div>
 
-            {/* Search Bar - Moved to the right */}
+            {/* Modern Search Bar */}
             <div className="d-flex align-items-center">
-              <div className="input-group" style={{ maxWidth: '300px' }}>
-                <span className="input-group-text" style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
+              <div className="position-relative" style={{ maxWidth: '350px' }}>
+                <div className="glass-card" style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(20px)',
+                  borderRadius: '20px',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRight: 'none',
-                  borderRadius: '12px 0 0 12px',
-                  backdropFilter: 'blur(10px)',
-                  color: '#fff'
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                  padding: '8px',
+                  transition: 'all 0.3s ease',
+                  transform: 'translateY(0)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.15)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  e.target.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+                  e.target.style.background = 'rgba(255, 255, 255, 0.15)';
+                  e.target.style.border = '1px solid rgba(255, 255, 255, 0.2)';
                 }}>
-                  📅
-                </span>
-                <input
-                  type="date"
-                  className="form-control"
-                  placeholder="Search by start date..."
-                  value={searchDate}
-                  onChange={(e) => setSearchDate(e.target.value)}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    borderRadius: '0 12px 12px 0',
-                    backdropFilter: 'blur(10px)',
-                    color: '#fff',
-                    transition: 'all 0.3s ease'
-                  }}
-                />
-                {searchDate && (
-                  <button 
-                    className="btn btn-outline-secondary" 
-                    onClick={clearSearch}
-                    title="Clear search"
-                    style={{
-                      position: 'absolute',
-                      right: '8px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      zIndex: 10,
-                      background: 'rgba(255, 255, 255, 0.2)',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '24px',
-                      height: '24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '12px'
-                    }}
-                  >
-                    ✕
-                  </button>
-                )}
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center justify-content-center me-3" style={{
+                      width: '40px',
+                      height: '40px',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                      transition: 'all 0.3s ease'
+                    }}>
+                      <span style={{ fontSize: '18px', color: '#fff' }}>📅</span>
+                    </div>
+                    <div className="flex-grow-1 position-relative">
+                      <input
+                        type="date"
+                        className="form-control border-0"
+                        placeholder="Filter by start date..."
+                        value={searchDate}
+                        onChange={(e) => setSearchDate(e.target.value)}
+                        style={{
+                          background: 'transparent',
+                          color: '#fff',
+                          fontSize: '14px',
+                          fontWeight: '500',
+                          padding: '12px 16px',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onFocus={(e) => {
+                          setDateInputFocused(true);
+                          e.target.style.outline = 'none';
+                          e.target.style.boxShadow = '0 0 0 2px rgba(102, 126, 234, 0.3)';
+                        }}
+                        onBlur={(e) => {
+                          setDateInputFocused(false);
+                          e.target.style.boxShadow = 'none';
+                        }}
+                      />
+                      {!searchDate && !dateInputFocused && (
+                        <div className="position-absolute top-50 start-0 translate-middle-y" style={{
+                          pointerEvents: 'none',
+                          color: 'rgba(255, 255, 255, 0.7)',
+                          fontSize: '14px',
+                          fontWeight: '500',
+                          paddingLeft: '16px'
+                        }}>
+                         
+                        </div>
+                      )}
+                    </div>
+                    {searchDate && (
+                      <button 
+                        className="btn d-flex align-items-center justify-content-center me-2" 
+                        onClick={clearSearch}
+                        title="Clear search"
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)',
+                          border: 'none',
+                          borderRadius: '8px',
+                          color: '#fff',
+                          fontSize: '12px',
+                          transition: 'all 0.3s ease',
+                          transform: 'scale(1)'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.transform = 'scale(1.1)';
+                          e.target.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = 'scale(1)';
+                          e.target.style.boxShadow = 'none';
+                        }}
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -584,22 +671,85 @@ const CampaignList = () => {
                       <div className="mt-auto">
                         <div className="d-grid gap-2">
                           <button 
-                            className="btn btn-dark btn-sm mb-2"
+                            className="btn btn-primary btn-sm mb-2"
                             onClick={() => handleDonate(campaign.id)}
+                            style={{
+                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                              border: 'none',
+                              borderRadius: '12px',
+                              fontWeight: '600',
+                              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                              transition: 'all 0.3s ease',
+                              padding: '8px 16px',
+                              transform: 'translateY(0)',
+                              cursor: 'pointer'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.transform = 'translateY(-2px)';
+                              e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+                              e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.transform = 'translateY(0)';
+                              e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                              e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                            }}
                           >
                             💰 Donate
                           </button>
                           {currentUser && campaign.owner === currentUser.username && (
                             <div className="d-flex gap-2">
                               <button 
-                                className="btn btn-outline-primary btn-sm flex-fill"
+                                className="btn btn-primary btn-sm flex-fill"
                                 onClick={() => handleEdit(campaign.id)}
+                                style={{
+                                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                  border: 'none',
+                                  borderRadius: '12px',
+                                  fontWeight: '600',
+                                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                                  transition: 'all 0.3s ease',
+                                  padding: '8px 16px',
+                                  transform: 'translateY(0)',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.target.style.transform = 'translateY(-2px)';
+                                  e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+                                  e.target.style.background = 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.style.transform = 'translateY(0)';
+                                  e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                                  e.target.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                                }}
                               >
                                 ✏️ Edit
                               </button>
                               <button 
-                                className="btn btn-outline-danger btn-sm flex-fill"
+                                className="btn btn-primary btn-sm flex-fill"
                                 onClick={() => handleDelete(campaign.id)}
+                                style={{
+                                  background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)',
+                                  border: 'none',
+                                  borderRadius: '12px',
+                                  fontWeight: '600',
+                                  boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)',
+                                  transition: 'all 0.3s ease',
+                                  padding: '8px 16px',
+                                  transform: 'translateY(0)',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.target.style.transform = 'translateY(-2px)';
+                                  e.target.style.boxShadow = '0 8px 25px rgba(255, 107, 107, 0.4)';
+                                  e.target.style.background = 'linear-gradient(135deg, #ff5252 0%, #d32f2f 100%)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.style.transform = 'translateY(0)';
+                                  e.target.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
+                                  e.target.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)';
+                                }}
                               >
                                 🗑️ Delete
                               </button>
