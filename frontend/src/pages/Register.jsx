@@ -59,8 +59,12 @@ const Register = () => {
                     try {
                       const res = await axios.post('http://localhost:8000/auth/users/', values );
 
-                      setStatus({ success: "Registration successful!" });
+                      setStatus({ success: "Registration successful! Redirecting to login..." });
                       resetForm();
+                      // Redirect to login after 2 seconds
+                      setTimeout(() => {
+                        navigate('/login');
+                      }, 2000);
                     } catch (err) {
                       setStatus({
                         error:

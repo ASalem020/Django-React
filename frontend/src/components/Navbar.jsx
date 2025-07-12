@@ -106,7 +106,7 @@ export default function Navbar({ isLoggedIn, userData, handleLogout }) {
             fontSize: '1.5rem',
             textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.1)'
           }}>
-            🚀 CrowdFund
+            🚀 CrowdSpark
           </Link>
           <ul className="navbar-nav ms-auto col-2 align-items-center">
             {isLoggedIn ? (

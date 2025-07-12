@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from '../context/ThemeContext';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 const API = axios.create({
   baseURL: 'http://localhost:8000/api',
@@ -27,11 +28,33 @@ const CampaignList = () => {
   const [donationLoading, setDonationLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const { isDarkMode } = useTheme();
+  const { isLoggedIn } = useOutletContext();
+  const navigate = useNavigate();
+
+  const handleProtectedClick = (path) => {
+    if (!isLoggedIn) {
+      localStorage.setItem("redirectAfterLogin", path);
+      navigate("/login");
+    } else {
+      navigate(path);
+    }
+  };
 
   useEffect(() => {
     fetchCampaigns();
     getCurrentUser();
   }, []);
+
+  // Handle donation redirect after login
+  useEffect(() => {
+    if (isLoggedIn) {
+      const redirectPath = localStorage.getItem("redirectAfterLogin");
+      if (redirectPath === "/") {
+        localStorage.removeItem("redirectAfterLogin");
+        // User is already on home page, no need to redirect
+      }
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     filterCampaigns();
@@ -82,6 +105,13 @@ const CampaignList = () => {
   };
 
   const handleDonate = (campaignId) => {
+    if (!isLoggedIn) {
+      // Store the home page redirect after login
+      localStorage.setItem("redirectAfterLogin", "/");
+      navigate("/login");
+      return;
+    }
+    
     const campaign = campaigns.find(c => c.id === campaignId);
     setSelectedCampaign(campaign);
     setDonationAmount('');
@@ -320,7 +350,7 @@ const CampaignList = () => {
                   </button>
                   <button 
                     className="btn btn-outline-secondary btn-lg px-4 py-3"
-                    onClick={() => window.location.href = '/create-project'}
+                    onClick={() => handleProtectedClick('/create-project')}
                     style={{
                       border: `2px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
                       borderRadius: '12px',

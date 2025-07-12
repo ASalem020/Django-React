@@ -206,11 +206,7 @@ const Login = () => {
                         </button>
                       </div>
 
-                      <div className="text-center mt-4">
-                        <small className="text-muted">
-                          Don't have an account? <span className="text-primary" style={{ cursor: 'pointer' }} onClick={() => navigate('/register')}>Sign up here</span>
-                        </small>
-                      </div>
+                     
                     </form>
                   )}
                 </Formik>
