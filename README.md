@@ -1,4 +1,4 @@
-# 🚀 Fund Me - Crowdfunding Platform
+# 🚀 Crowd Spark - Crowdfunding Platform
 
 A modern, full-stack crowdfunding platform built with Django REST Framework and React. This application allows users to create campaigns, make donations, and track funding progress in real-time.
 
@@ -122,7 +122,7 @@ Before running this application, ensure you have the following installed:
 - **Python 3.8+**
 - **Node.js 16+**
 - **npm** (comes with Node.js)
-- **PostgreSQL** (for production) or **SQLite** (for development)
+- **PostgreSQL** (for production)
 - **Git**
 
 ## 🚀 Installation
@@ -130,7 +130,7 @@ Before running this application, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ASalem020/Django-React.git
 cd Django-React
 ```
 
@@ -257,7 +257,7 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 ### User Model
 - `username` - Unique username
 - `email` - Unique email address
-- `phone` - Egyptian phone number (10 digits starting with 01)
+- `phone` - Egyptian phone number (11 digits starting with 01)
 - `password` - Hashed password
 - `date_joined` - Account creation date
 
@@ -285,18 +285,6 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 - **Python**: Follow PEP 8 guidelines
 - **JavaScript**: Use ESLint configuration
 - **React**: Use functional components with hooks
-
-### Testing
-
-```bash
-# Backend tests
-cd backend
-python manage.py test
-
-# Frontend tests (if configured)
-cd frontend
-npm test
-```
 
 ### Database Migrations
 
